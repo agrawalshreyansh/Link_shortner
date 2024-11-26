@@ -1,0 +1,11 @@
+.link_box {
+    width: 350px;
+    height: 25px;
+    border: 0;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+button {
+    cursor: pointer;
+}
