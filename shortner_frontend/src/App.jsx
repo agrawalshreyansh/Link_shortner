@@ -1,10 +1,10 @@
 
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import paste from './assets/paste.png'
 import InputBar from './components/input_bar';
 import copy from './assets/copy.png';
-
+import Nav from './components/nav'
 
 
 function App() {
@@ -37,14 +37,14 @@ function App() {
           body: JSON.stringify({'link': InputVal }),
       });
 
-      if (response.ok) {
+      try /*(response.ok)*/ {
           const data = await response.json();
           setNewLink('http://localhost:5173/'+data.shorturl)
           console.log('Response from server:', data.shorturl);
           
-      } else {
-          console.error('Failed to send generate short link! ');
-          alert("Failed!")
+      } catch (err) {
+          console.error('Failed to send generate short link! ',err);
+          alert("Failed to generate link!")
       }
   } catch (error) {
       console.error('Error:', error);
@@ -67,6 +67,7 @@ function App() {
 
   return (
    <>
+      <Nav/>
       <form className='link_form'>
         <div className='input_clip'>
           <InputBar InputVal={InputVal} setInputVal = {setInputVal} text={"Paste your link here"}/>
