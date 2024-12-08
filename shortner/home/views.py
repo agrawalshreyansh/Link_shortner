@@ -6,15 +6,23 @@ from django.http import JsonResponse
 import random 
 import string
 from django.views.decorators.csrf import csrf_exempt
-def shortpage(request,item) :
 
-    if links.objects.filter(url_key=item).exists :
 
-        redirect_to = links.objects.get(url_key=item).Org_url
+@csrf_exempt
+def shortpage(request) :
+    if request.method == "POST" :
+        data  = json.loads(request.body)
         
-        return redirect(redirect_to)
+        if links.objects.filter(url_key=data.get("link")).exists :
+
+            redirect = links.objects.get(url_key=data.get("link")).Org_url
+            
+            return JsonResponse({'uid' : redirect})
+        else :
+            return JsonResponse(f"Item doesn't exist")
     else :
-        return HttpResponse(f"Item doesn't exist")
+        return HttpResponse("Page you were looking for does't exist")
+
 
 @csrf_exempt
 def user_page(request) : 
@@ -22,10 +30,11 @@ def user_page(request) :
             body = json.loads(request.body)
             url = body.get('link')
             short_url = gen_rand_char()
-
+           
+           
             links.objects.create(url_key=short_url, Org_url = url)
             
-            return JsonResponse({ "message" : "Save success!", "shorturl" : short_url })
+            return JsonResponse({ "message" : "Save success!", "shorturl" : short_url})
 
         else :
             return JsonResponse({"message":"404"})
@@ -39,4 +48,6 @@ def gen_rand_char() :
     
     return gen_rand_char()
   
+
+
     
